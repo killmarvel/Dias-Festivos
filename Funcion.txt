@@ -1,0 +1,67 @@
+// Funcion Dia festivo variable, es decir por ejemplo  el tercer miercoles de julio
+// Creada por : LSC Moroni Romero   09/03/2024
+//
+// date = of_festivo_variable(integer año, Integer mes, Integer dia, Integer periodo)    
+//  
+// año : Necesario para saber el año del cual se buscara el dia variable
+// mes : Necesario para calcular el dia del cual ocupamos  saber
+// dia : Necesario para saber el dia buscado 
+//       1 = domingo
+//       2 = Lunes
+//       3 = Martes
+//       4 = Miercoles
+//       5 = Jueves
+//       6 = Viernes
+//       7 = Sabado
+// periodo :  se refiere a la posicion del dia en el mes  
+//       1 = es la Primera ocurrencia del dia  en el mes
+//       2 = es la Segunda ocurrencia del dia  en el mes
+//       3 = es la Tercera ocurrencia del dia  en el mes
+//       4 = es la Cuarta ocurrencia del dia  en el mes
+//       5 = es la Quinta ocurrencia del dia  en el mes
+//       6 = Cuando la posicion es 6 se refiere al buscar la ultima ocurrencia en el mes
+
+integer ll_mes[]
+ll_mes[1]  = 31
+ll_mes[3]  = 31
+ll_mes[4]  = 30
+ll_mes[5]  = 31
+ll_mes[6]  = 30
+ll_mes[7]  = 31
+ll_mes[8]  = 31
+ll_mes[9]  = 30
+ll_mes[10] = 31
+ll_mes[11] = 30
+ll_mes[12] = 31
+
+//Primero debo saber los dias del mes que nos interesa
+If MOD(arg_año,4) = 0 And MOD(arg_año,100) <> 0 Or MOD(arg_año,400) = 0 Then
+		ll_mes[2] = 29
+Else
+      ll_mes[2] = 28
+End If
+
+//Debe recorrer el mes  y año en cuestion y revisar por el dia y su posicion
+Long ll_r, ll_k = 0
+Date ld_fecha
+
+setnull(ld_fecha)
+
+IF arg_periodo < 6 THEN
+		FOR ll_r = 1 TO ll_mes[arg_mes]
+				ld_fecha = date(string(arg_año) + '/' + right('0' + string(arg_mes),2) + '/' + right('0' + string(ll_r),2))
+				IF arg_dia = daynumber(ld_fecha) THEN
+					ll_k++
+					IF ll_k = arg_periodo THEN return(ld_fecha)
+				END IF	
+		NEXT
+ELSE
+	FOR ll_r = ll_mes[arg_mes] To 1 step -1
+			ld_fecha = date(string(arg_año) + '/' + right('0' + string(arg_mes),2) + '/' + right('0' + string(ll_r),2))
+			IF arg_dia = daynumber(ld_fecha) THEN 
+				return(ld_fecha)
+				exit
+			END IF	
+	NEXT
+END IF	
+Return ld_fecha
